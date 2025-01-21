@@ -55,7 +55,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 ),
                 OnboardingPage(
                   image: 'assets/images/features2.png',
-                  title: 'Ve Daha Fazlası',
+                  title: 'Daha Fazlası',
                   description: 'Evcil hayvanlarınız için en iyisi!',
                   textColor: textColors[0],
                   isLastPage: true,
@@ -135,19 +135,46 @@ class OnboardingPage extends StatelessWidget {
           Text(
             description,
             style: TextStyle(
-              fontSize: 16,
+              fontSize: 20,
               color: textColor, // Dinamik text rengi
             ),
             textAlign: TextAlign.center,
           ),
           if (isLastPage) ...[
             SizedBox(height: 40),
-            ElevatedButton(
-              onPressed: onButtonPressed,
-              style: ElevatedButton.styleFrom(
-                padding: EdgeInsets.symmetric(horizontal: 40, vertical: 12),
+            InkWell(
+              onTap: onButtonPressed,
+              borderRadius: BorderRadius.circular(25),
+              child: AnimatedContainer(
+                duration: Duration(milliseconds: 300),
+                height: 50,
+                width: 200,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [Colors.lightBlue, Colors.redAccent],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  borderRadius: BorderRadius.circular(25),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.purpleAccent.withValues(alpha: 1.5),
+                      offset: Offset(0, 4),
+                      blurRadius: 10,
+                    ),
+                  ],
+                ),
+                child: Center(
+                  child: Text(
+                    'Haydi Başlayalım',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
               ),
-              child: Text('Uygulamayı Kullan'),
             ),
           ]
         ],
