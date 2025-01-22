@@ -29,7 +29,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: AnimatedContainer(
-        duration: Duration(milliseconds: 500),
+        duration: const Duration(milliseconds: 500),
         color: backgroundColors[_currentIndex], // Arka plan rengi
         child: Stack(
           children: [
@@ -74,8 +74,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: List.generate(backgroundColors.length, (index) {
                   return AnimatedContainer(
-                    duration: Duration(milliseconds: 300),
-                    margin: EdgeInsets.symmetric(horizontal: 4),
+                    duration: const Duration(milliseconds: 300),
+                    margin: const EdgeInsets.symmetric(horizontal: 4),
                     width: _currentIndex == index ? 12 : 8,
                     height: _currentIndex == index ? 12 : 8,
                     decoration: BoxDecoration(
@@ -121,7 +121,7 @@ class OnboardingPage extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Image.asset(image, height: 325),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           Text(
             title,
             style: TextStyle(
@@ -131,7 +131,7 @@ class OnboardingPage extends StatelessWidget {
             ),
             textAlign: TextAlign.center,
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Text(
             description,
             style: TextStyle(
@@ -141,38 +141,23 @@ class OnboardingPage extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
           if (isLastPage) ...[
-            SizedBox(height: 40),
-            InkWell(
-              onTap: onButtonPressed,
-              borderRadius: BorderRadius.circular(25),
-              child: AnimatedContainer(
-                duration: Duration(milliseconds: 300),
-                height: 50,
-                width: 200,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [Colors.lightBlue, Colors.redAccent],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
+            const SizedBox(height: 40),
+            ElevatedButton(
+              onPressed: onButtonPressed,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blue, // Buton rengi
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(25),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.purpleAccent.withValues(alpha: 1.5),
-                      offset: Offset(0, 4),
-                      blurRadius: 10,
-                    ),
-                  ],
                 ),
-                child: Center(
-                  child: Text(
-                    'Haydi Başlayalım',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+              ),
+              child: const Text(
+                'Haydi Başlayalım',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),

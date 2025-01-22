@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'screens/onboarding_screen.dart';
+import 'screens/home_screen.dart';
+// import 'screens/add_pet_screen.dart';
+// import 'screens/pet_list_screen.dart';
+// import 'screens/settings_screen.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -17,21 +21,10 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: {
-        '/': (context) => OnboardingScreen(),
-        '/home': (context) => HomeScreen(), // Ana ekranınız buraya gelecek
+        '/': (context) => const OnboardingScreen(),
+        '/home': (context) => const HomeScreen(),
+        // '/addPet': (context) => const AddPetScreen(),
       },
-    );
-  }
-}
-
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Ana Sayfa')),
-      body: Center(child: Text('Evcil Hayvan Takip Uygulamasına Hoşgeldiniz!')),
     );
   }
 }
