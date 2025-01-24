@@ -18,8 +18,8 @@ class _HomeScreenState extends State<HomeScreen> {
   String? _type;
   String? _photoPath;
 
-  Future<void> _pickImage() async {
-    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+  Future<void> _pickImage(ImageSource source) async {
+    final pickedFile = await _picker.pickImage(source: source);
     if (pickedFile != null) {
       setState(() {
         _photoPath = pickedFile.path;
@@ -32,7 +32,10 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       floatingActionButton: _addTaskButton(),
       body: _tasksList(),
-      appBar: AppBar(title: const Text('Ana Sayfa')),
+      appBar: AppBar(
+        title: const Text('Ana Sayfa'),
+        backgroundColor: Theme.of(context).primaryColor,
+      ),
     );
   }
 
@@ -70,15 +73,24 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
                 const SizedBox(height: 8),
-                ElevatedButton(
-                  onPressed: _pickImage,
-                  child: const Text('Fotoğraf Seç'),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () => _pickImage(ImageSource.gallery),
+                      child: const Text('Galeriden Seç'),
+                    ),
+                    ElevatedButton(
+                      onPressed: () => _pickImage(ImageSource.camera),
+                      child: const Text('Kamerayla Çek'),
+                    ),
+                  ],
                 ),
                 if (_photoPath != null)
                   Image.file(File(_photoPath!), height: 100),
                 const SizedBox(height: 8),
                 MaterialButton(
-                  color: Theme.of(context).colorScheme.primary,
+                  color: Theme.of(context).primaryColor,
                   onPressed: () {
                     if (_name == null ||
                         _name!.isEmpty ||
