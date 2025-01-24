@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class SettingsScreen extends StatelessWidget {
-  const SettingsScreen({super.key});
+class FeedingTrackerScreen extends StatelessWidget {
+  const FeedingTrackerScreen({super.key});
 
   void _onItemTapped(BuildContext context, int index) {
     if (index == 0) {
       Navigator.pushReplacementNamed(context, '/home');
     } else if (index == 1) {
-      Navigator.pushReplacementNamed(context, '/settings');
+      Navigator.pushReplacementNamed(context, '/feeding_tracker');
     }
   }
 
@@ -15,7 +15,7 @@ class SettingsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Center(child: Text('Ayarlar')),
+        title: const Center(child: Text('Beslenme Takibi')),
         backgroundColor: Theme.of(context).primaryColor,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(
@@ -25,7 +25,7 @@ class SettingsScreen extends StatelessWidget {
       ),
       body: const Center(
         child: Text(
-          'Ayarlar Sayfası',
+          'Beslenme Takibi Sayfası',
           style: TextStyle(fontSize: 24),
         ),
       ),
@@ -36,8 +36,8 @@ class SettingsScreen extends StatelessWidget {
             label: 'Ana Sayfa',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: 'Ayarlar',
+            icon: Icon(Icons.restaurant),
+            label: 'Beslenme Takibi',
           ),
         ],
         currentIndex: 1,

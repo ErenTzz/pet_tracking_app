@@ -39,7 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
     if (index == 0) {
       Navigator.pushReplacementNamed(context, '/home');
     } else if (index == 1) {
-      Navigator.pushReplacementNamed(context, '/settings');
+      Navigator.pushReplacementNamed(context, '/feeding_tracker');
     }
   }
 
@@ -233,8 +233,8 @@ class _HomeScreenState extends State<HomeScreen> {
             label: 'Ana Sayfa',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: 'Ayarlar',
+            icon: Icon(Icons.restaurant),
+            label: 'Beslenme Takibi',
           ),
         ],
         currentIndex: _selectedIndex,

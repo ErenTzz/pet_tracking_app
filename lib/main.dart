@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'screens/onboarding_screen.dart';
 import 'screens/home_screen.dart';
-import 'screens/settings_screen.dart';
+import 'screens/feeding_tracker_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,14 +15,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Evcil Hayvan Takip Uygulaması',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
       initialRoute: '/',
       routes: {
         '/': (context) => const OnboardingScreen(),
         '/home': (context) => const HomeScreen(),
-        '/settings': (context) => const SettingsScreen(),
+        '/feeding_tracker': (context) => const FeedingTrackerScreen(),
       },
     );
   }
