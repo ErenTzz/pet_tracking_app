@@ -1,11 +1,20 @@
 import 'package:flutter/material.dart';
 import 'screens/onboarding_screen.dart';
 import 'screens/home_screen.dart';
-// import 'screens/pet_list_screen.dart';
-// import 'screens/settings_screen.dart';
+import 'screens/settings_screen.dart';
+import 'package:sqflite/sqflite.dart';
+import 'package:path/path.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await deleteExistingDatabase();
   runApp(const MyApp());
+}
+
+Future<void> deleteExistingDatabase() async {
+  final databasedirPath = await getDatabasesPath();
+  final databasePath = join(databasedirPath, "master_db.db");
+  await deleteDatabase(databasePath);
 }
 
 class MyApp extends StatelessWidget {
@@ -22,8 +31,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => const OnboardingScreen(),
         '/home': (context) => const HomeScreen(),
-        // '/petList': (context) => const PetListScreen(),
-        // '/settings': (context) => const SettingsScreen(),
+        '/settings': (context) => const SettingsScreen(),
       },
     );
   }
