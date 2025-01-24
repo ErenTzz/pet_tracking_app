@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'screens/onboarding_screen.dart';
 import 'screens/home_screen.dart';
-// import 'screens/add_pet_screen.dart';
 // import 'screens/pet_list_screen.dart';
 // import 'screens/settings_screen.dart';
 
@@ -23,6 +22,8 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => const OnboardingScreen(),
         '/home': (context) => const HomeScreen(),
+        // '/petList': (context) => const PetListScreen(),
+        // '/settings': (context) => const SettingsScreen(),
       },
     );
   }

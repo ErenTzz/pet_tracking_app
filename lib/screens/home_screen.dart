@@ -32,7 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
         showDialog(
           context: context,
           builder: (_) => AlertDialog(
-            title: const Text("Add Task"),
+            title: const Text("Evcil Hayvan Ekle"),
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -80,24 +80,49 @@ class _HomeScreenState extends State<HomeScreen> {
     return FutureBuilder(
       future: _databaseService.getTask(),
       builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return const Center(child: CircularProgressIndicator());
+        }
         return ListView.builder(
+          padding:
+              const EdgeInsets.only(bottom: 80), // Alt kısma padding ekleyin
           itemCount: snapshot.data?.length ?? 0,
           itemBuilder: (context, index) {
             Task task = snapshot.data![index];
-            return ListTile(
-              onLongPress: () {
-                _databaseService.deleteTask(
-                  task.id,
-                );
-                setState(() {});
-              },
-              title: Text(
-                task.content,
+            return Card(
+              margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+              child: ListTile(
+                onLongPress: () {
+                  _databaseService.deleteTask(task.id);
+                  setState(() {});
+                },
+                leading: CircleAvatar(
+                  backgroundImage: AssetImage(
+                      'assets/images/pet_placeholder.png'), // Placeholder image
+                  radius: 30,
+                ),
+                title: Text(
+                  task.content,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                subtitle: Text(
+                  'Tür: ${task.content}', // Placeholder for pet type
+                  style: const TextStyle(
+                    fontSize: 14,
+                    color: Colors.grey,
+                  ),
+                ),
+                trailing: IconButton(
+                  icon: const Icon(Icons.delete, color: Colors.red),
+                  onPressed: () {
+                    _databaseService.deleteTask(task.id);
+                    setState(() {});
+                  },
+                ),
               ),
-              // trailing: Checkbox(
-              //   value: false,
-              //   onChanged: (value) {},
-              // ),
             );
           },
         );
