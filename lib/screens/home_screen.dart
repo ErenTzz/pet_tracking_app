@@ -81,6 +81,137 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  void _showPetDetails(Task pet) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          title: Center(
+            child: Text(
+              pet.name[0].toUpperCase() + pet.name.substring(1),
+              style: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                CircleAvatar(
+                  backgroundImage: FileImage(File(pet.photoPath)),
+                  radius: 80,
+                ),
+                const SizedBox(height: 16),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text(
+                      'Tür: ',
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      pet.type,
+                      style: const TextStyle(fontSize: 18),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text(
+                      'Yaş: ',
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      '${pet.age}',
+                      style: const TextStyle(fontSize: 18),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text(
+                      'Cinsiyet: ',
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      pet.breed,
+                      style: const TextStyle(fontSize: 18),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text(
+                      'Ağırlık: ',
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      '${pet.weight} kg',
+                      style: const TextStyle(fontSize: 18),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text(
+                      'Sağlık Durumu: ',
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      pet.healthStatus,
+                      style: const TextStyle(fontSize: 18),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text('Kapat'),
+                ),
+                const SizedBox(width: 16),
+                TextButton(
+                  onPressed: () async {
+                    await _databaseService.deleteTask(pet.id);
+                    Navigator.pop(context);
+                    setState(() {});
+                  },
+                  child: const Text('Sil', style: TextStyle(color: Colors.red)),
+                ),
+              ],
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -321,16 +452,15 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 elevation: 4,
                 child: ListTile(
-                  onLongPress: () async {
-                    await _databaseService.deleteTask(task.id);
-                    setState(() {});
+                  onTap: () {
+                    _showPetDetails(task);
                   },
                   leading: CircleAvatar(
                     backgroundImage: FileImage(File(task.photoPath)),
                     radius: 30,
                   ),
                   title: Text(
-                    task.name,
+                    task.name[0].toUpperCase() + task.name.substring(1),
                     style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -340,18 +470,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text('Tür: ${task.type}'),
-                      Text('Yaş: ${task.age}'),
                       Text('Cinsiyet: ${task.breed}'),
-                      Text('Ağırlık: ${task.weight} kg'),
-                      Text('Sağlık Durumu: ${task.healthStatus}'),
                     ],
-                  ),
-                  trailing: IconButton(
-                    icon: const Icon(Icons.delete, color: Colors.red),
-                    onPressed: () async {
-                      await _databaseService.deleteTask(task.id);
-                      setState(() {});
-                    },
                   ),
                 ),
               );
