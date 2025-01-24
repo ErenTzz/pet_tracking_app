@@ -1,8 +1,8 @@
-class Task {
+class Pet {
   final int status, id;
   final String content;
 
-  Task({
+  Pet({
     required this.id,
     required this.content,
     required this.status,

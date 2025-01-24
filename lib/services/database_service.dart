@@ -1,7 +1,7 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
-import '../models/task.dart';
+import '../models/pet.dart';
 
 class DatabaseService {
   static Database? _db;
@@ -74,11 +74,11 @@ class DatabaseService {
     );
   }
 
-  Future<List<Task>> getTask() async {
+  Future<List<Pet>> getTask() async {
     final db = await database;
     final data = await db.query(_tasksTableName);
-    List<Task> tasks = data
-        .map((e) => Task(
+    List<Pet> tasks = data
+        .map((e) => Pet(
             id: e["id"] as int,
             status: e["status"] as int,
             content: e["content"] as String))
@@ -86,13 +86,3 @@ class DatabaseService {
     return tasks;
   }
 }
-
-// onCreate: (db, version) {
-      //   db.execute('''
-      //     CREATE TABLE pets(
-      //       id INTEGER PRIMARY KEY AUTOINCREMENT,
-      //       name TEXT,
-      //       species TEXT,
-      //       breed TEXT,
-      //       birthDate TEXT,''');
-      // },
