@@ -1,16 +1,16 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
-import '../models/pet.dart';
+import '../models/task.dart';
 
 class DatabaseService {
   static Database? _db;
   static final DatabaseService instance = DatabaseService._constructor();
 
-  final String _petsTableName = "pets";
-  final String _petsIdColumnName = "id";
-  final String _petsContentColumnName = "content";
-  final String _petsStatusColumnName = "status";
+  final String _tasksTableName = "tasks";
+  final String _tasksIdColumnName = "id";
+  final String _tasksContentColumnName = "content";
+  final String _tasksStatusColumnName = "status";
 
   DatabaseService._constructor();
 
@@ -29,10 +29,10 @@ class DatabaseService {
       databasePath,
       version: 1,
       onCreate: (db, version) {
-        db.execute(''' CREATE TABLE $_petsTableName(
-          $_petsIdColumnName INTEGER PRIMARY KEY,
-          $_petsContentColumnName TEXT NOT NULL,
-          $_petsStatusColumnName INTEGER NOT NULL
+        db.execute(''' CREATE TABLE $_tasksTableName(
+          $_tasksIdColumnName INTEGER PRIMARY KEY,
+          $_tasksContentColumnName TEXT NOT NULL,
+          $_tasksStatusColumnName INTEGER NOT NULL
         )''');
       },
     );
@@ -43,16 +43,16 @@ class DatabaseService {
     String content,
   ) async {
     final db = await database;
-    await db.insert(_petsTableName, {
-      _petsContentColumnName: content,
-      _petsStatusColumnName: 0,
+    await db.insert(_tasksTableName, {
+      _tasksContentColumnName: content,
+      _tasksStatusColumnName: 0,
     });
   }
 
   void deleteTask(int id) async {
     final db = await database;
     await db.delete(
-      _petsTableName,
+      _tasksTableName,
       where: 'id = ?',
       whereArgs: [
         id,
@@ -63,9 +63,9 @@ class DatabaseService {
   void updateTaskStatus(int id, int status) async {
     final db = await database;
     await db.update(
-      _petsTableName,
+      _tasksTableName,
       {
-        _petsStatusColumnName: status,
+        _tasksStatusColumnName: status,
       },
       where: 'id = ?',
       whereArgs: [
@@ -74,11 +74,11 @@ class DatabaseService {
     );
   }
 
-  Future<List<Pet>> getTask() async {
+  Future<List<Task>> getTask() async {
     final db = await database;
-    final data = await db.query(_petsTableName);
-    List<Pet> tasks = data
-        .map((e) => Pet(
+    final data = await db.query(_tasksTableName);
+    List<Task> tasks = data
+        .map((e) => Task(
             id: e["id"] as int,
             status: e["status"] as int,
             content: e["content"] as String))

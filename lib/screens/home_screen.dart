@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pet_tracking_app/services/database_service.dart';
 
-import '../models/pet.dart';
+import '../models/task.dart';
 // import 'pet_list_screen.dart';
 // import 'settings_screen.dart';
 
@@ -15,7 +15,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final DatabaseService _databaseService = DatabaseService.instance;
 
-  String? _pet = null;
+  String? _task = null;
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 TextField(
                   onChanged: (value) {
                     setState(() {
-                      _pet = value;
+                      _task = value;
                     });
                   },
                   decoration: const InputDecoration(
@@ -50,10 +50,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 MaterialButton(
                   color: Theme.of(context).colorScheme.primary,
                   onPressed: () {
-                    if (_pet == null || _pet == "") return;
-                    _databaseService.addTask(_pet!);
+                    if (_task == null || _task == "") return;
+                    _databaseService.addTask(_task!);
                     setState(() {
-                      _pet = null;
+                      _task = null;
                     });
                     Navigator.pop(
                       context,
@@ -83,16 +83,16 @@ class _HomeScreenState extends State<HomeScreen> {
         return ListView.builder(
           itemCount: snapshot.data?.length ?? 0,
           itemBuilder: (context, index) {
-            Pet pet = snapshot.data![index];
+            Task task = snapshot.data![index];
             return ListTile(
               onLongPress: () {
                 _databaseService.deleteTask(
-                  pet.id,
+                  task.id,
                 );
                 setState(() {});
               },
               title: Text(
-                pet.content,
+                task.content,
               ),
               // trailing: Checkbox(
               //   value: false,
