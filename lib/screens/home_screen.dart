@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:pet_tracking_app/services/database_service.dart';
-
 import '../models/task.dart';
-// import 'pet_list_screen.dart';
-// import 'settings_screen.dart';
+import 'dart:io';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -14,8 +13,19 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final DatabaseService _databaseService = DatabaseService.instance;
+  final ImagePicker _picker = ImagePicker();
+  String? _name;
+  String? _type;
+  String? _photoPath;
 
-  String? _task = null;
+  Future<void> _pickImage() async {
+    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(() {
+        _photoPath = pickedFile.path;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 TextField(
                   onChanged: (value) {
                     setState(() {
-                      _task = value;
+                      _name = value;
                     });
                   },
                   decoration: const InputDecoration(
@@ -47,17 +57,43 @@ class _HomeScreenState extends State<HomeScreen> {
                     hintText: 'Evcil Hayvan Adı',
                   ),
                 ),
+                const SizedBox(height: 8),
+                TextField(
+                  onChanged: (value) {
+                    setState(() {
+                      _type = value;
+                    });
+                  },
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    hintText: 'Evcil Hayvan Türü',
+                  ),
+                ),
+                const SizedBox(height: 8),
+                ElevatedButton(
+                  onPressed: _pickImage,
+                  child: const Text('Fotoğraf Seç'),
+                ),
+                if (_photoPath != null)
+                  Image.file(File(_photoPath!), height: 100),
+                const SizedBox(height: 8),
                 MaterialButton(
                   color: Theme.of(context).colorScheme.primary,
                   onPressed: () {
-                    if (_task == null || _task == "") return;
-                    _databaseService.addTask(_task!);
+                    if (_name == null ||
+                        _name!.isEmpty ||
+                        _type == null ||
+                        _type!.isEmpty ||
+                        _photoPath == null) {
+                      return;
+                    }
+                    _databaseService.addTask(_name!, _type!, _photoPath!);
                     setState(() {
-                      _task = null;
+                      _name = null;
+                      _type = null;
+                      _photoPath = null;
                     });
-                    Navigator.pop(
-                      context,
-                    );
+                    Navigator.pop(context);
                   },
                   child: const Text(
                     'Ekle',
@@ -70,7 +106,6 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
         );
-        // _databaseService.addTask('Yeni Görev');
       },
       child: const Icon(Icons.add),
     );
@@ -80,52 +115,59 @@ class _HomeScreenState extends State<HomeScreen> {
     return FutureBuilder(
       future: _databaseService.getTask(),
       builder: (context, snapshot) {
-        if (!snapshot.hasData) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
-        }
-        return ListView.builder(
-          padding:
-              const EdgeInsets.only(bottom: 80), // Alt kısma padding ekleyin
-          itemCount: snapshot.data?.length ?? 0,
-          itemBuilder: (context, index) {
-            Task task = snapshot.data![index];
-            return Card(
-              margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-              child: ListTile(
-                onLongPress: () {
-                  _databaseService.deleteTask(task.id);
-                  setState(() {});
-                },
-                leading: CircleAvatar(
-                  backgroundImage: AssetImage(
-                      'assets/images/pet_placeholder.png'), // Placeholder image
-                  radius: 30,
-                ),
-                title: Text(
-                  task.content,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                subtitle: Text(
-                  'Tür: ${task.content}', // Placeholder for pet type
-                  style: const TextStyle(
-                    fontSize: 14,
-                    color: Colors.grey,
-                  ),
-                ),
-                trailing: IconButton(
-                  icon: const Icon(Icons.delete, color: Colors.red),
-                  onPressed: () {
+        } else if (snapshot.hasError) {
+          return Center(child: Text('Hata: ${snapshot.error}'));
+        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+          return const Center(child: Text('Henüz evcil hayvan eklenmedi.'));
+        } else {
+          // print('Tasks displayed: ${snapshot.data!.length}');
+          return ListView.builder(
+            padding:
+                const EdgeInsets.only(bottom: 80), // Alt kısma padding ekleyin
+            itemCount: snapshot.data?.length ?? 0,
+            itemBuilder: (context, index) {
+              Task task = snapshot.data![index];
+              // print(
+              //     'Displaying task: ${task.content}, ${task.type}, ${task.photoPath}');
+              return Card(
+                margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                child: ListTile(
+                  onLongPress: () {
                     _databaseService.deleteTask(task.id);
                     setState(() {});
                   },
+                  leading: CircleAvatar(
+                    backgroundImage: FileImage(File(task.photoPath)),
+                    radius: 30,
+                  ),
+                  title: Text(
+                    task.content,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  subtitle: Text(
+                    'Tür: ${task.type}',
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: Colors.grey,
+                    ),
+                  ),
+                  trailing: IconButton(
+                    icon: const Icon(Icons.delete, color: Colors.red),
+                    onPressed: () {
+                      _databaseService.deleteTask(task.id);
+                      setState(() {});
+                    },
+                  ),
                 ),
-              ),
-            );
-          },
-        );
+              );
+            },
+          );
+        }
       },
     );
   }
