@@ -8,13 +8,9 @@ class DatabaseService {
 
   final String _tasksTableName = "tasks";
   final String _tasksIdColumnName = "id";
-  final String _tasksNameColumnName = "name";
+  final String _tasksContentColumnName = "content";
   final String _tasksTypeColumnName = "type";
-  final String _tasksAgeColumnName = "age";
-  final String _tasksBreedColumnName = "breed";
   final String _tasksPhotoPathColumnName = "photoPath";
-  final String _tasksWeightColumnName = "weight";
-  final String _tasksHealthStatusColumnName = "healthStatus";
   final String _tasksStatusColumnName = "status";
 
   DatabaseService._constructor();
@@ -32,38 +28,27 @@ class DatabaseService {
     final databasePath = join(databasedirPath, "master_db.db");
     final database = await openDatabase(
       databasePath,
-      version: 6, // Update the version to force onUpgrade
+      version: 3, // Update the version to force onUpgrade
       onCreate: (db, version) {
         db.execute('''
           CREATE TABLE $_tasksTableName(
             $_tasksIdColumnName INTEGER PRIMARY KEY AUTOINCREMENT,
-            $_tasksNameColumnName TEXT NOT NULL,
+            $_tasksContentColumnName TEXT NOT NULL,
             $_tasksTypeColumnName TEXT NOT NULL,
-            $_tasksAgeColumnName INTEGER NOT NULL,
-            $_tasksBreedColumnName TEXT NOT NULL,
             $_tasksPhotoPathColumnName TEXT NOT NULL,
-            $_tasksWeightColumnName REAL NOT NULL,
-            $_tasksHealthStatusColumnName TEXT NOT NULL,
             $_tasksStatusColumnName INTEGER NOT NULL
           )
         ''');
       },
       onUpgrade: (db, oldVersion, newVersion) {
-        if (oldVersion < 6) {
+        if (oldVersion < 2) {
           db.execute('''
-            ALTER TABLE $_tasksTableName ADD COLUMN $_tasksNameColumnName TEXT NOT NULL DEFAULT ''
+            ALTER TABLE $_tasksTableName ADD COLUMN $_tasksTypeColumnName TEXT NOT NULL DEFAULT ''
           ''');
+        }
+        if (oldVersion < 3) {
           db.execute('''
-            ALTER TABLE $_tasksTableName ADD COLUMN $_tasksAgeColumnName INTEGER NOT NULL DEFAULT 0
-          ''');
-          db.execute('''
-            ALTER TABLE $_tasksTableName ADD COLUMN $_tasksBreedColumnName TEXT NOT NULL DEFAULT ''
-          ''');
-          db.execute('''
-            ALTER TABLE $_tasksTableName ADD COLUMN $_tasksWeightColumnName REAL NOT NULL DEFAULT 0.0
-          ''');
-          db.execute('''
-            ALTER TABLE $_tasksTableName ADD COLUMN $_tasksHealthStatusColumnName TEXT NOT NULL DEFAULT ''
+            ALTER TABLE $_tasksTableName ADD COLUMN $_tasksPhotoPathColumnName TEXT NOT NULL DEFAULT ''
           ''');
         }
       },
@@ -71,21 +56,15 @@ class DatabaseService {
     return database;
   }
 
-  Future<void> addTask(String name, String type, int age, String breed,
-      String photoPath, double weight, String healthStatus) async {
+  Future<void> addTask(String content, String type, String photoPath) async {
     final db = await database;
     await db.insert(_tasksTableName, {
-      _tasksNameColumnName: name,
+      _tasksContentColumnName: content,
       _tasksTypeColumnName: type,
-      _tasksAgeColumnName: age,
-      _tasksBreedColumnName: breed,
       _tasksPhotoPathColumnName: photoPath,
-      _tasksWeightColumnName: weight,
-      _tasksHealthStatusColumnName: healthStatus,
       _tasksStatusColumnName: 0,
     });
-    print(
-        'Task added: $name, $type, $age, $breed, $photoPath, $weight, $healthStatus');
+    // print('Task added: $content, $type, $photoPath');
   }
 
   Future<void> deleteTask(int id) async {
@@ -95,7 +74,7 @@ class DatabaseService {
       where: '$_tasksIdColumnName = ?',
       whereArgs: [id],
     );
-    print('Task deleted: $id');
+    // print('Task deleted: $id');
   }
 
   Future<void> updateTaskStatus(int id, int status) async {
@@ -116,19 +95,14 @@ class DatabaseService {
     List<Task> tasks = data
         .map((e) => Task(
             id: e[_tasksIdColumnName] as int,
-            name: e[_tasksNameColumnName] as String? ?? '',
+            content: e[_tasksContentColumnName] as String? ?? '',
             type: e[_tasksTypeColumnName] as String? ?? '',
-            age: e[_tasksAgeColumnName] as int? ?? 0,
-            breed: e[_tasksBreedColumnName] as String? ?? '',
             photoPath: e[_tasksPhotoPathColumnName] as String? ?? '',
-            weight: e[_tasksWeightColumnName] as double? ?? 0.0,
-            healthStatus: e[_tasksHealthStatusColumnName] as String? ?? '',
             status: e[_tasksStatusColumnName] as int))
         .toList();
-    print('Tasks fetched: ${tasks.length}');
+    // print('Tasks fetched: ${tasks.length}');
     tasks.forEach((task) {
-      print(
-          'Fetched task: ${task.name}, ${task.type}, ${task.age}, ${task.breed}, ${task.photoPath}, ${task.weight}, ${task.healthStatus}');
+      // print('Fetched task: ${task.content}, ${task.type}, ${task.photoPath}');
     });
     return tasks;
   }
