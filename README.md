@@ -83,9 +83,7 @@ lib/
 - **Notifications**: Users receive notifications for feeding times and other important events.(Notification is not fully integrated)
 
 ## Screenshots and Video
-
-### Video
-<iframe width="560" height="315" src="https://www.youtube.com/watch?v=bCFSvZeF-w8" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+Video = "https://www.youtube.com/watch?v=bCFSvZeF-w8"
 
 
 ### Onboarding Screen
