@@ -4,6 +4,9 @@ import 'package:pet_tracking_app/services/database_service.dart';
 import '../models/task.dart';
 import 'dart:io';
 
+import 'feeding_tracker_screen.dart';
+import 'feeding_history_screen.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -37,9 +40,31 @@ class _HomeScreenState extends State<HomeScreen> {
       _selectedIndex = index;
     });
     if (index == 0) {
-      Navigator.pushReplacementNamed(context, '/home');
+      Navigator.pushReplacement(
+        context,
+        PageRouteBuilder(
+          pageBuilder: (context, animation1, animation2) => const HomeScreen(),
+          transitionDuration: Duration(seconds: 0),
+        ),
+      );
     } else if (index == 1) {
-      Navigator.pushReplacementNamed(context, '/feeding_tracker');
+      Navigator.pushReplacement(
+        context,
+        PageRouteBuilder(
+          pageBuilder: (context, animation1, animation2) =>
+              const FeedingTrackerScreen(),
+          transitionDuration: Duration(seconds: 0),
+        ),
+      );
+    } else if (index == 2) {
+      Navigator.pushReplacement(
+        context,
+        PageRouteBuilder(
+          pageBuilder: (context, animation1, animation2) =>
+              const FeedingHistoryScreen(),
+          transitionDuration: Duration(seconds: 0),
+        ),
+      );
     }
   }
 
@@ -235,6 +260,10 @@ class _HomeScreenState extends State<HomeScreen> {
           BottomNavigationBarItem(
             icon: Icon(Icons.restaurant),
             label: 'Beslenme Takibi',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.history),
+            label: 'Beslenme Geçmişi',
           ),
         ],
         currentIndex: _selectedIndex,
@@ -438,39 +467,59 @@ class _HomeScreenState extends State<HomeScreen> {
         } else {
           print('Tasks displayed: ${snapshot.data!.length}');
           return ListView.builder(
-            padding:
-                const EdgeInsets.only(bottom: 80), // Alt kısma padding ekleyin
+            padding: const EdgeInsets.all(16),
             itemCount: snapshot.data?.length ?? 0,
             itemBuilder: (context, index) {
               Task task = snapshot.data![index];
               print(
                   'Displaying task: ${task.name}, ${task.type}, ${task.age}, ${task.breed}, ${task.photoPath}, ${task.weight}, ${task.healthStatus}');
-              return Card(
-                margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                elevation: 4,
-                child: ListTile(
-                  onTap: () {
-                    _showPetDetails(task);
-                  },
-                  leading: CircleAvatar(
-                    backgroundImage: FileImage(File(task.photoPath)),
-                    radius: 30,
+              return GestureDetector(
+                onTap: () {
+                  _showPetDetails(task);
+                },
+                child: Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
                   ),
-                  title: Text(
-                    task.name[0].toUpperCase() + task.name.substring(1),
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  subtitle: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  elevation: 4,
+                  child: Column(
                     children: [
-                      Text('Tür: ${task.type}'),
-                      Text('Cinsiyet: ${task.breed}'),
+                      ClipRRect(
+                        borderRadius: const BorderRadius.vertical(
+                          top: Radius.circular(16),
+                        ),
+                        child: Image.file(
+                          File(task.photoPath),
+                          height: MediaQuery.of(context).size.height * 0.4,
+                          width: double.infinity,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              task.name[0].toUpperCase() +
+                                  task.name.substring(1),
+                              style: const TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              'Tür: ${task.type}',
+                              style: const TextStyle(fontSize: 16),
+                            ),
+                            Text(
+                              'Cinsiyet: ${task.breed}',
+                              style: const TextStyle(fontSize: 16),
+                            ),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                 ),

@@ -1,6 +1,7 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import '../models/task.dart';
+import '../models/feeding_record.dart';
 
 class DatabaseService {
   static Database? _db;
@@ -17,6 +18,14 @@ class DatabaseService {
   final String _tasksHealthStatusColumnName = "healthStatus";
   final String _tasksStatusColumnName = "status";
 
+  final String _feedingRecordsTableName = "feeding_records";
+  final String _feedingRecordsIdColumnName = "id";
+  final String _feedingRecordsPetIdColumnName = "petId";
+  final String _feedingRecordsFoodTypeColumnName = "foodType";
+  final String _feedingRecordsMealTimeColumnName = "mealTime";
+  final String _feedingRecordsAmountColumnName = "amount";
+  final String _feedingRecordsDrankWaterColumnName = "drankWater";
+
   DatabaseService._constructor();
 
   Future<Database> get database async {
@@ -32,7 +41,7 @@ class DatabaseService {
     final databasePath = join(databasedirPath, "master_db.db");
     final database = await openDatabase(
       databasePath,
-      version: 6, // Update the version to force onUpgrade
+      version: 7, // Update the version to force onUpgrade
       onCreate: (db, version) {
         db.execute('''
           CREATE TABLE $_tasksTableName(
@@ -47,23 +56,30 @@ class DatabaseService {
             $_tasksStatusColumnName INTEGER NOT NULL
           )
         ''');
+        db.execute('''
+          CREATE TABLE $_feedingRecordsTableName(
+            $_feedingRecordsIdColumnName INTEGER PRIMARY KEY AUTOINCREMENT,
+            $_feedingRecordsPetIdColumnName INTEGER NOT NULL,
+            $_feedingRecordsFoodTypeColumnName TEXT NOT NULL,
+            $_feedingRecordsMealTimeColumnName TEXT NOT NULL,
+            $_feedingRecordsAmountColumnName REAL NOT NULL,
+            $_feedingRecordsDrankWaterColumnName INTEGER NOT NULL,
+            FOREIGN KEY ($_feedingRecordsPetIdColumnName) REFERENCES $_tasksTableName($_tasksIdColumnName)
+          )
+        ''');
       },
       onUpgrade: (db, oldVersion, newVersion) {
-        if (oldVersion < 6) {
+        if (oldVersion < 7) {
           db.execute('''
-            ALTER TABLE $_tasksTableName ADD COLUMN $_tasksNameColumnName TEXT NOT NULL DEFAULT ''
-          ''');
-          db.execute('''
-            ALTER TABLE $_tasksTableName ADD COLUMN $_tasksAgeColumnName INTEGER NOT NULL DEFAULT 0
-          ''');
-          db.execute('''
-            ALTER TABLE $_tasksTableName ADD COLUMN $_tasksBreedColumnName TEXT NOT NULL DEFAULT ''
-          ''');
-          db.execute('''
-            ALTER TABLE $_tasksTableName ADD COLUMN $_tasksWeightColumnName REAL NOT NULL DEFAULT 0.0
-          ''');
-          db.execute('''
-            ALTER TABLE $_tasksTableName ADD COLUMN $_tasksHealthStatusColumnName TEXT NOT NULL DEFAULT ''
+            CREATE TABLE $_feedingRecordsTableName(
+              $_feedingRecordsIdColumnName INTEGER PRIMARY KEY AUTOINCREMENT,
+              $_feedingRecordsPetIdColumnName INTEGER NOT NULL,
+              $_feedingRecordsFoodTypeColumnName TEXT NOT NULL,
+              $_feedingRecordsMealTimeColumnName TEXT NOT NULL,
+              $_feedingRecordsAmountColumnName REAL NOT NULL,
+              $_feedingRecordsDrankWaterColumnName INTEGER NOT NULL,
+              FOREIGN KEY ($_feedingRecordsPetIdColumnName) REFERENCES $_tasksTableName($_tasksIdColumnName)
+            )
           ''');
         }
       },
@@ -147,5 +163,39 @@ class DatabaseService {
             healthStatus: e[_tasksHealthStatusColumnName] as String? ?? '',
             status: e[_tasksStatusColumnName] as int))
         .toList());
+  }
+
+  Future<void> addFeedingRecord(int petId, String foodType, String mealTime,
+      double amount, bool drankWater) async {
+    final db = await database;
+    await db.insert(_feedingRecordsTableName, {
+      _feedingRecordsPetIdColumnName: petId,
+      _feedingRecordsFoodTypeColumnName: foodType,
+      _feedingRecordsMealTimeColumnName: mealTime,
+      _feedingRecordsAmountColumnName: amount,
+      _feedingRecordsDrankWaterColumnName: drankWater ? 1 : 0,
+    });
+    print(
+        'Feeding record added: $petId, $foodType, $mealTime, $amount, $drankWater');
+  }
+
+  Future<List<FeedingRecord>> getFeedingRecords(int petId) async {
+    final db = await database;
+    final data = await db.query(
+      _feedingRecordsTableName,
+      where: '$_feedingRecordsPetIdColumnName = ?',
+      whereArgs: [petId],
+    );
+    List<FeedingRecord> records = data
+        .map((e) => FeedingRecord(
+            id: e[_feedingRecordsIdColumnName] as int,
+            petId: e[_feedingRecordsPetIdColumnName] as int,
+            foodType: e[_feedingRecordsFoodTypeColumnName] as String,
+            mealTime: e[_feedingRecordsMealTimeColumnName] as String,
+            amount: e[_feedingRecordsAmountColumnName] as double,
+            drankWater: e[_feedingRecordsDrankWaterColumnName] == 1))
+        .toList();
+    print('Feeding records fetched: ${records.length}');
+    return records;
   }
 }
