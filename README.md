@@ -84,10 +84,40 @@ lib/
 
 ## Screenshots
 
-![Onboarding Screen](assets/images/onboarding_screen.png)
-![Home Screen](assets/images/home_screen.png)
-![Feeding Tracker Screen](assets/images/feeding_tracker_screen.png)
-![Feeding History Screen](assets/images/feeding_history_screen.png)
+### Onboarding Screen
+![Onboarding Screen](assets/images/petTrackingApp/onboarding_screen/onboarding_screen_1.png)
+![Onboarding Screen](assets/images/petTrackingApp/onboarding_screen/onboarding_screen_2.png)
+![Onboarding Screen](assets/images/petTrackingApp/onboarding_screen/onboarding_screen_3.png)
+
+
+### Home Screen
+![Home Screen](assets/images/petTrackingApp/home_screen/home_screen_1.png)
+![Home Screen](assets/images/petTrackingApp/home_screen/home_screen_2.png)
+![Home Screen](assets/images/petTrackingApp/home_screen/home_screen_3.png)
+![Home Screen](assets/images/petTrackingApp/home_screen/home_screen_4.png)
+![Home Screen](assets/images/petTrackingApp/home_screen/home_screen_5.png)
+![Home Screen](assets/images/petTrackingApp/home_screen/home_screen_6.png)
+![Home Screen](assets/images/petTrackingApp/home_screen/home_screen_7.png)
+![Home Screen](assets/images/petTrackingApp/home_screen/home_screen_8.png)
+
+
+### Feeding Tracker Screen
+![Feeding Tracker Screen](assets/images/petTrackingApp/feeding_tracker_screen/feeding_tracker_screen_1.png)
+![Feeding Tracker Screen](assets/images/petTrackingApp/feeding_tracker_screen/feeding_tracker_screen_2.png)
+![Feeding Tracker Screen](assets/images/petTrackingApp/feeding_tracker_screen/feeding_tracker_screen_3.png)
+![Feeding Tracker Screen](assets/images/petTrackingApp/feeding_tracker_screen/feeding_tracker_screen_4.png)
+![Feeding Tracker Screen](assets/images/petTrackingApp/feeding_tracker_screen/feeding_tracker_screen_5.png)
+![Feeding Tracker Screen](assets/images/petTrackingApp/feeding_tracker_screen/feeding_tracker_screen_6.png)
+
+
+### Feeding History Screen
+![Feeding History Screen](assets/images/petTrackingApp/feeding_history_screen/feeding_history_screen_1.png)
+![Feeding History Screen](assets/images/petTrackingApp/feeding_history_screen/feeding_history_screen_2.png)
+![Feeding History Screen](assets/images/petTrackingApp/feeding_history_screen/feeding_history_screen_3.png)
+![Feeding History Screen](assets/images/petTrackingApp/feeding_history_screen/feeding_history_screen_4.png)
+![Feeding History Screen](assets/images/petTrackingApp/feeding_history_screen/feeding_history_screen_5.png)
+![Feeding History Screen](assets/images/petTrackingApp/feeding_history_screen/feeding_history_screen_6.png)
+
 
 ## License
 

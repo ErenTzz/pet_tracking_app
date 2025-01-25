@@ -28,6 +28,8 @@ flutter:
   assets:
     - assets/images/
     - assets/images/pet_placeholder.png
+    - assets/images/petTrackingApp
+    
 
 flutter_icons:
   android: true
