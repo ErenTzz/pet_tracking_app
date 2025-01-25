@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Pet Tracking App is a Flutter application designed to help pet owners manage and track their pets' feeding schedules, health status, and other important information. The app provides features such as adding pets, tracking feeding history, and setting reminders for feeding times.
+The Pet Tracking App is a Flutter application designed to help pet owners manage and track their pets' feeding schedules, health status, and other important information. The app provides features such as adding pets, tracking feeding history, and setting reminders for feeding times(Under development-Code included).
 
 ## Technologies Used
 
@@ -29,7 +29,7 @@ The Pet Tracking App is a Flutter application designed to help pet owners manage
 
 ### Notifications
 
-- **Flutter Local Notifications**: A plugin used to show notifications to the user. It is used to remind users about feeding times and other important events.
+- **Flutter Local Notifications**: A plugin used to show notifications to the user. It is used to remind users about feeding times and other important events.(Under development-Code included)
 
 ### Other Packages
 
