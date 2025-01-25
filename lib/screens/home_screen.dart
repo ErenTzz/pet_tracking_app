@@ -128,14 +128,20 @@ class _HomeScreenState extends State<HomeScreen> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                CircleAvatar(
-                  backgroundImage: FileImage(File(pet.photoPath)),
-                  radius: 80,
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(16),
+                  child: Image.file(
+                    File(pet.photoPath),
+                    height: 160,
+                    width: 160,
+                    fit: BoxFit.cover,
+                  ),
                 ),
                 const SizedBox(height: 16),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    const SizedBox(width: 8),
                     const Text(
                       'Tür: ',
                       style:
@@ -151,6 +157,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    const Icon(Icons.cake, size: 24),
+                    const SizedBox(width: 8),
                     const Text(
                       'Yaş: ',
                       style:
@@ -166,6 +174,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    const Icon(Icons.pets, size: 24),
+                    const SizedBox(width: 8),
                     const Text(
                       'Cinsiyet: ',
                       style:
@@ -181,6 +191,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    const Icon(Icons.monitor_weight, size: 24),
+                    const SizedBox(width: 8),
                     const Text(
                       'Ağırlık: ',
                       style:
@@ -196,6 +208,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    const Icon(Icons.health_and_safety, size: 24),
+                    const SizedBox(width: 8),
                     const Text(
                       'Sağlık Durumu: ',
                       style:
@@ -214,20 +228,38 @@ class _HomeScreenState extends State<HomeScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: const Text('Kapat'),
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                    ),
+                    child: const Text('Kapat',
+                        style: TextStyle(color: Colors.white)),
+                  ),
                 ),
                 const SizedBox(width: 16),
-                TextButton(
-                  onPressed: () async {
-                    await _databaseService.deleteTask(pet.id);
-                    Navigator.pop(context);
-                    setState(() {});
-                  },
-                  child: const Text('Sil', style: TextStyle(color: Colors.red)),
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      await _databaseService.deleteTask(pet.id);
+                      Navigator.pop(context);
+                      setState(() {});
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.red,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                    ),
+                    child: const Text('Sil',
+                        style: TextStyle(color: Colors.white)),
+                  ),
                 ),
               ],
             ),
@@ -243,7 +275,23 @@ class _HomeScreenState extends State<HomeScreen> {
       floatingActionButton: _addTaskButton(),
       body: _tasksList(),
       appBar: AppBar(
-        title: const Center(child: Text('Evcil Hayvanlarım')),
+        title: const Center(
+          child: Text(
+            'Evcil Hayvanlarım',
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+              shadows: [
+                Shadow(
+                  offset: Offset(1.5, 1.5),
+                  blurRadius: 3.0,
+                  color: Colors.black,
+                ),
+              ],
+            ),
+          ),
+        ),
         backgroundColor: Theme.of(context).primaryColor,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(
@@ -267,7 +315,8 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Theme.of(context).primaryColor,
+        selectedItemColor: Colors.white,
+        backgroundColor: Theme.of(context).primaryColor,
         onTap: _onItemTapped,
       ),
     );
@@ -300,11 +349,15 @@ class _HomeScreenState extends State<HomeScreen> {
                           });
                         },
                         decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(16)),
-                            hintText: 'Evcil Hayvan Adı',
-                            prefixIcon: const Icon(Icons.pets)),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          hintText: 'Evcil Hayvan Adı',
+                          prefixIcon: const Icon(Icons.pets),
+                          counterText: '${_name?.length ?? 0}/20',
+                        ),
                         maxLength: 20, // Limit the length of the input
+                        maxLines: 1,
                       ),
                       const SizedBox(height: 8),
                       TextField(
@@ -314,11 +367,15 @@ class _HomeScreenState extends State<HomeScreen> {
                           });
                         },
                         decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(16)),
-                            hintText: 'Evcil Hayvan Türü',
-                            prefixIcon: const Icon(Icons.pets)),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          hintText: 'Evcil Hayvan Türü',
+                          prefixIcon: const Icon(Icons.pets),
+                          counterText: '${_type?.length ?? 0}/20',
+                        ),
                         maxLength: 20, // Limit the length of the input
+                        maxLines: 1,
                       ),
                       const SizedBox(height: 8),
                       TextField(
@@ -328,11 +385,14 @@ class _HomeScreenState extends State<HomeScreen> {
                           });
                         },
                         decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(16)),
-                            hintText: 'Yaş',
-                            prefixIcon: const Icon(Icons.cake)),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          hintText: 'Yaş',
+                          prefixIcon: const Icon(Icons.cake),
+                        ),
                         keyboardType: TextInputType.number,
+                        maxLines: 1,
                       ),
                       const SizedBox(height: 8),
                       TextField(
@@ -342,10 +402,13 @@ class _HomeScreenState extends State<HomeScreen> {
                           });
                         },
                         decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(16)),
-                            hintText: 'Cinsiyet',
-                            prefixIcon: const Icon(Icons.pets)),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          hintText: 'Cinsiyet',
+                          prefixIcon: const Icon(Icons.pets),
+                        ),
+                        maxLines: 1,
                       ),
                       const SizedBox(height: 8),
                       Row(
@@ -404,11 +467,14 @@ class _HomeScreenState extends State<HomeScreen> {
                           });
                         },
                         decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(16)),
-                            hintText: 'Ağırlık (kg)',
-                            prefixIcon: const Icon(Icons.monitor_weight)),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          hintText: 'Ağırlık (kg)',
+                          prefixIcon: const Icon(Icons.monitor_weight),
+                        ),
                         keyboardType: TextInputType.number,
+                        maxLines: 1,
                       ),
                       const SizedBox(height: 8),
                       TextField(
@@ -418,10 +484,13 @@ class _HomeScreenState extends State<HomeScreen> {
                           });
                         },
                         decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(16)),
-                            hintText: 'Sağlık Durumu',
-                            prefixIcon: const Icon(Icons.health_and_safety)),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          hintText: 'Sağlık Durumu',
+                          prefixIcon: const Icon(Icons.health_and_safety),
+                        ),
+                        maxLines: 1,
                       ),
                       const SizedBox(height: 8),
                       MaterialButton(
@@ -450,7 +519,7 @@ class _HomeScreenState extends State<HomeScreen> {
           });
         });
       },
-      child: const Icon(Icons.add),
+      child: const Icon(Icons.pets),
     );
   }
 
@@ -463,7 +532,16 @@ class _HomeScreenState extends State<HomeScreen> {
         } else if (snapshot.hasError) {
           return Center(child: Text('Hata: ${snapshot.error}'));
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          return const Center(child: Text('Henüz evcil hayvan eklenmedi.'));
+          return const Center(
+            child: Text(
+              'Haydi İlk Evcil Dostumuzu Ekleyelim!',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          );
         } else {
           print('Tasks displayed: ${snapshot.data!.length}');
           return ListView.builder(
@@ -498,24 +576,42 @@ class _HomeScreenState extends State<HomeScreen> {
                       Padding(
                         padding: const EdgeInsets.all(16.0),
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Text(
-                              task.name[0].toUpperCase() +
-                                  task.name.substring(1),
-                              style: const TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const SizedBox(width: 8),
+                                Text(
+                                  task.name[0].toUpperCase() +
+                                      task.name.substring(1),
+                                  style: const TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
                             ),
                             const SizedBox(height: 8),
-                            Text(
-                              'Tür: ${task.type}',
-                              style: const TextStyle(fontSize: 16),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const SizedBox(width: 8),
+                                Text(
+                                  'Tür: ${task.type}',
+                                  style: const TextStyle(fontSize: 16),
+                                ),
+                              ],
                             ),
-                            Text(
-                              'Cinsiyet: ${task.breed}',
-                              style: const TextStyle(fontSize: 16),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const SizedBox(width: 8),
+                                Text(
+                                  'Cinsiyet: ${task.breed}',
+                                  style: const TextStyle(fontSize: 16),
+                                ),
+                              ],
                             ),
                           ],
                         ),

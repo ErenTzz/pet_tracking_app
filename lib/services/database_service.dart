@@ -179,6 +179,16 @@ class DatabaseService {
         'Feeding record added: $petId, $foodType, $mealTime, $amount, $drankWater');
   }
 
+  Future<void> deleteFeedingRecord(int id) async {
+    final db = await database;
+    await db.delete(
+      _feedingRecordsTableName,
+      where: '$_feedingRecordsIdColumnName = ?',
+      whereArgs: [id],
+    );
+    print('Feeding record deleted: $id');
+  }
+
   Future<List<FeedingRecord>> getFeedingRecords(int petId) async {
     final db = await database;
     final data = await db.query(

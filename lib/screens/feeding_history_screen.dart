@@ -100,6 +100,28 @@ class _FeedingHistoryScreenState extends State<FeedingHistoryScreen> {
                         'Su İçti mi: ${record.drankWater ? 'Evet' : 'Hayır'}',
                         style: const TextStyle(fontSize: 16),
                       ),
+                      const SizedBox(height: 8),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: IconButton(
+                          icon: const Icon(Icons.delete, color: Colors.red),
+                          onPressed: () async {
+                            await _databaseService
+                                .deleteFeedingRecord(record.id);
+                            setState(() {
+                              records.remove(record);
+                            });
+                            Navigator.pop(context);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content:
+                                    Text('Beslenme kaydı başarıyla silindi!'),
+                                duration: Duration(seconds: 2),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
                     ],
                   ),
                 );
@@ -123,7 +145,23 @@ class _FeedingHistoryScreenState extends State<FeedingHistoryScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Center(child: Text('Beslenme Geçmişi')),
+        title: const Center(
+          child: Text(
+            'Beslenme Geçmişi',
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+              shadows: [
+                Shadow(
+                  offset: Offset(1.5, 1.5),
+                  blurRadius: 3.0,
+                  color: Colors.black,
+                ),
+              ],
+            ),
+          ),
+        ),
         backgroundColor: Theme.of(context).primaryColor,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(
@@ -139,7 +177,16 @@ class _FeedingHistoryScreenState extends State<FeedingHistoryScreen> {
           } else if (snapshot.hasError) {
             return Center(child: Text('Hata: ${snapshot.error}'));
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text('Henüz evcil hayvan eklenmedi.'));
+            return const Center(
+              child: Text(
+                'Haydi İlk Evcil Dostumuzu Ekleyelim!',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            );
           } else {
             return GridView.builder(
               padding: const EdgeInsets.all(16),
@@ -210,7 +257,8 @@ class _FeedingHistoryScreenState extends State<FeedingHistoryScreen> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Theme.of(context).primaryColor,
+        selectedItemColor: Colors.white,
+        backgroundColor: Theme.of(context).primaryColor,
         onTap: _onItemTapped,
       ),
     );

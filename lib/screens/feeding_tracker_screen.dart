@@ -19,7 +19,6 @@ class _FeedingTrackerScreenState extends State<FeedingTrackerScreen> {
   final Map<int, String?> _selectedMealTimes = {};
   final Map<int, TextEditingController> _amountControllers = {};
   final Map<int, bool> _drankWaters = {};
-  bool _isButtonDisabled = false;
 
   void _onItemTapped(int index) {
     if (index == 0) {
@@ -52,11 +51,34 @@ class _FeedingTrackerScreenState extends State<FeedingTrackerScreen> {
   }
 
   void _saveFeedingDetails(Task pet) async {
-    setState(() {
-      _isButtonDisabled = true;
-    });
+    if (_selectedFoodTypes[pet.id] == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Yemek Türü boş olamaz!'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return;
+    }
+    if (_selectedMealTimes[pet.id] == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Yemek Saati boş olamaz!'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return;
+    }
+    if (_amountControllers[pet.id]?.text.isEmpty ?? true) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Miktar boş olamaz!'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return;
+    }
 
-    // Save feeding details to the database
     await _databaseService.addFeedingRecord(
       pet.id,
       _selectedFoodTypes[pet.id]!,
@@ -72,9 +94,11 @@ class _FeedingTrackerScreenState extends State<FeedingTrackerScreen> {
       ),
     );
 
-    await Future.delayed(Duration(seconds: 2));
     setState(() {
-      _isButtonDisabled = false;
+      _selectedFoodTypes[pet.id] = null;
+      _selectedMealTimes[pet.id] = null;
+      _amountControllers[pet.id]?.clear();
+      _drankWaters[pet.id] = false;
     });
   }
 
@@ -82,7 +106,23 @@ class _FeedingTrackerScreenState extends State<FeedingTrackerScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Center(child: Text('Beslenme Takibi')),
+        title: const Center(
+          child: Text(
+            'Beslenme Takibi',
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+              shadows: [
+                Shadow(
+                  offset: Offset(1.0, 1.0),
+                  blurRadius: 3.0,
+                  color: Colors.black,
+                ),
+              ],
+            ),
+          ),
+        ),
         backgroundColor: Theme.of(context).primaryColor,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(
@@ -98,7 +138,15 @@ class _FeedingTrackerScreenState extends State<FeedingTrackerScreen> {
           } else if (snapshot.hasError) {
             return Center(child: Text('Hata: ${snapshot.error}'));
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text('Henüz evcil hayvan eklenmedi.'));
+            return const Center(
+              child: Text(
+                'Haydi İlk Evcil Dostumuzu Ekleyelim!',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            );
           } else {
             return ListView.builder(
               padding: const EdgeInsets.all(16),
@@ -209,19 +257,15 @@ class _FeedingTrackerScreenState extends State<FeedingTrackerScreen> {
                               child: MouseRegion(
                                 cursor: SystemMouseCursors.click,
                                 child: GestureDetector(
-                                  onTap: _isButtonDisabled
-                                      ? null
-                                      : () {
-                                          _saveFeedingDetails(pet);
-                                        },
+                                  onTap: () {
+                                    _saveFeedingDetails(pet);
+                                  },
                                   child: AnimatedContainer(
                                     duration: const Duration(milliseconds: 200),
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 24, vertical: 12),
                                     decoration: BoxDecoration(
-                                      color: _isButtonDisabled
-                                          ? Colors.grey
-                                          : Theme.of(context).primaryColor,
+                                      color: Theme.of(context).primaryColor,
                                       borderRadius: BorderRadius.circular(16),
                                       boxShadow: [
                                         BoxShadow(
@@ -271,7 +315,8 @@ class _FeedingTrackerScreenState extends State<FeedingTrackerScreen> {
           ),
         ],
         currentIndex: 1,
-        selectedItemColor: Theme.of(context).primaryColor,
+        selectedItemColor: Colors.white,
+        backgroundColor: Theme.of(context).primaryColor,
         onTap: _onItemTapped,
       ),
     );
