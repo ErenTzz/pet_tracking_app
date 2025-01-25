@@ -36,6 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _onItemTapped(int index) {
+    if (_selectedIndex == index) return; // Prevent refreshing the current page
     setState(() {
       _selectedIndex = index;
     });
@@ -534,7 +535,7 @@ class _HomeScreenState extends State<HomeScreen> {
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
           return const Center(
             child: Text(
-              'Haydi İlk Evcil Dostumuzu Ekleyelim!',
+              'Hadi İlk Evcil Dostumuzu Ekleyelim!',
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,

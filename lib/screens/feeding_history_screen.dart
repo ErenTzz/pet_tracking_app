@@ -19,6 +19,7 @@ class _FeedingHistoryScreenState extends State<FeedingHistoryScreen> {
   int _selectedIndex = 2;
 
   void _onItemTapped(int index) {
+    if (_selectedIndex == index) return; // Prevent refreshing the current page
     setState(() {
       _selectedIndex = index;
     });
@@ -179,7 +180,7 @@ class _FeedingHistoryScreenState extends State<FeedingHistoryScreen> {
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
             return const Center(
               child: Text(
-                'Haydi İlk Evcil Dostumuzu Ekleyelim!',
+                'Hadi İlk Evcil Dostumuzu Ekleyelim!',
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,

@@ -30,14 +30,7 @@ class _FeedingTrackerScreenState extends State<FeedingTrackerScreen> {
         ),
       );
     } else if (index == 1) {
-      Navigator.pushReplacement(
-        context,
-        PageRouteBuilder(
-          pageBuilder: (context, animation1, animation2) =>
-              const FeedingTrackerScreen(),
-          transitionDuration: Duration(seconds: 0),
-        ),
-      );
+      // Do nothing if the current screen is tapped
     } else if (index == 2) {
       Navigator.pushReplacement(
         context,
@@ -140,7 +133,7 @@ class _FeedingTrackerScreenState extends State<FeedingTrackerScreen> {
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
             return const Center(
               child: Text(
-                'Haydi İlk Evcil Dostumuzu Ekleyelim!',
+                'Hadi İlk Evcil Dostumuzu Ekleyelim!',
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,

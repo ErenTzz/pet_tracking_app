@@ -153,7 +153,7 @@ class OnboardingPage extends StatelessWidget {
                 ),
               ),
               child: const Text(
-                'Haydi Başlayalım',
+                'Hadi Başlayalım',
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 18,
