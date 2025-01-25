@@ -85,9 +85,9 @@ lib/
 ## Screenshots
 
 ### Onboarding Screen
-![Onboarding Screen](assets/images/petTrackingApp/onboarding_screen/onboarding_screen_1.png)
-![Onboarding Screen](assets/images/petTrackingApp/onboarding_screen/onboarding_screen_2.png)
-![Onboarding Screen](assets/images/petTrackingApp/onboarding_screen/onboarding_screen_3.png)
+![Onboarding Screen](assets/images/petTrackingApp/onboarding_screen/onboarding_screen_1.png.png)
+![Onboarding Screen](assets/images/petTrackingApp/onboarding_screen/onboarding_screen_2.png.png)
+![Onboarding Screen](assets/images/petTrackingApp/onboarding_screen/onboarding_screen_3.png.png)
 
 
 ### Home Screen
