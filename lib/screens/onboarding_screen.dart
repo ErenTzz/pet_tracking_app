@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -24,6 +25,20 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     Colors.black,
     Colors.yellow,
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    SystemChrome.setEnabledSystemUIMode(
+        SystemUiMode.immersiveSticky); // Hide status and navigation bars
+  }
+
+  @override
+  void dispose() {
+    SystemChrome.setEnabledSystemUIMode(
+        SystemUiMode.edgeToEdge); // Restore status and navigation bars
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

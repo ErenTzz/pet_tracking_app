@@ -55,6 +55,15 @@ class _FeedingHistoryScreenState extends State<FeedingHistoryScreen> {
   void _showFeedingHistory(Task pet) async {
     List<FeedingRecord> records =
         await _databaseService.getFeedingRecords(pet.id);
+    if (records.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Bu hayvana ait beslenme geçmişi bulunamadı!'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return;
+    }
     showDialog(
       context: context,
       builder: (context) {
