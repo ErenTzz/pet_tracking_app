@@ -86,7 +86,6 @@ class _HomeScreenState extends State<HomeScreen> {
       return;
     }
 
-    print('Add Task button pressed');
     if (_name == null ||
         _name!.isEmpty ||
         _type == null ||
@@ -123,9 +122,8 @@ class _HomeScreenState extends State<HomeScreen> {
       });
       Navigator.pop(context);
       setState(() {}); // Refresh the task list
-    } catch (e) {
-      print('Error adding task: $e');
-    }
+      // ignore: empty_catches
+    } catch (e) {}
   }
 
   void _showPetDetails(Task pet) {
@@ -614,7 +612,6 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           );
         } else {
-          print('Tasks displayed: ${snapshot.data!.length}');
           return ListView.builder(
             padding: const EdgeInsets.all(16),
             itemCount: snapshot.data?.length ?? 0,

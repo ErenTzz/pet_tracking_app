@@ -100,8 +100,6 @@ class DatabaseService {
       _tasksHealthStatusColumnName: healthStatus,
       _tasksStatusColumnName: 0,
     });
-    print(
-        'Task added: $name, $type, $age, $breed, $photoPath, $weight, $healthStatus');
   }
 
   Future<void> deleteTask(int id) async {
