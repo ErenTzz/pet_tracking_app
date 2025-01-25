@@ -82,7 +82,11 @@ lib/
 - **Feeding History**: Users can view the feeding history of their pets.
 - **Notifications**: Users receive notifications for feeding times and other important events.(Notification is not fully integrated)
 
-## Screenshots
+## Screenshots and Video
+
+### Video
+<iframe width="560" height="315" src="https://www.youtube.com/watch?v=bCFSvZeF-w8" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+
 
 ### Onboarding Screen
 ![Onboarding Screen](assets/images/petTrackingApp/onboarding_screen/onboarding_screen_1.png.png)
